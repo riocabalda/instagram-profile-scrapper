@@ -40,9 +40,7 @@ function ProfilesResultsTable({ profiles, className }) {
       <Table>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
-            <TableHead className="w-14 min-w-[3rem] text-center tabular-nums">
-              #
-            </TableHead>
+            <TableHead className="w-14 min-w-[3rem] text-center tabular-nums" />
             <TableHead className="min-w-[140px]">Full name</TableHead>
             <TableHead className="min-w-[160px]">Username</TableHead>
             <TableHead className="min-w-[220px]">URL</TableHead>
