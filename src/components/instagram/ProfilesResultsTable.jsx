@@ -72,7 +72,7 @@ function ProfilesResultsTable({ profiles, className }) {
                 key={key}
                 className={cn(
                   isUrlRowActive &&
-                    "bg-emerald-100 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-950/45",
+                    "bg-emerald-100 hover:bg-emerald-100 dark:bg-emerald-950 dark:hover:bg-emerald-950",
                 )}
               >
                 <TableCell className="text-center tabular-nums text-muted-foreground">
@@ -109,7 +109,11 @@ function ProfilesResultsTable({ profiles, className }) {
                           aria-hidden
                         />
                       </a>
-                      <CopyTextButton text={url} label="Copy URL" />
+                      <CopyTextButton
+                        text={url}
+                        label="Copy URL"
+                        onClick={() => addUrlClickedRow(index)}
+                      />
                     </div>
                   ) : (
                     <span className="text-muted-foreground">—</span>

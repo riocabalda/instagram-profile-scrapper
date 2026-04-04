@@ -16,10 +16,15 @@ import {
  *   size?: "default" | "sm" | "lg" | "icon";
  * }} props
  */
-function CopyTextButton({ text, label, className, size = "icon" }) {
+function CopyTextButton({ text, label, className, size = "icon", onClick }) {
   const { copy, copied } = useCopyToClipboard();
 
   const disabled = !text;
+
+  const handleCopy = async () => {
+    void copy(text);
+    onClick?.();
+  };
 
   return (
     <Tooltip>
@@ -32,7 +37,7 @@ function CopyTextButton({ text, label, className, size = "icon" }) {
             className={cn("shrink-0", className)}
             disabled={disabled}
             aria-label={label}
-            onClick={() => void copy(text)}
+            onClick={handleCopy}
           >
             {copied ? (
               <Check className="size-4 text-emerald-600" aria-hidden />
