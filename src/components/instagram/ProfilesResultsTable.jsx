@@ -103,7 +103,7 @@ function ProfilesResultsTable({ profiles, className }) {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={() => addUrlClickedRow(index)}
-                        className="inline-flex max-w-[min(420px,55vw)] items-center gap-1 break-all pt-2 text-sm font-medium underline-offset-4 hover:text-blue-400 hover:underline dark:text-white  dark:hover:text-blue-400"
+                        className="inline-flex max-w-[min(420px,55vw)] items-center gap-1 break-all pt-2 text-sm font-medium underline-offset-4 text-blue-700 dark:text-blue-200 hover:text-blue-400 hover:underline dark:hover:text-blue-400"
                       >
                         <span className="line-clamp-2">{url}</span>
                         <ExternalLink
@@ -121,7 +121,7 @@ function ProfilesResultsTable({ profiles, className }) {
                   {followersDisplay}
                 </TableCell>
                 <TableCell className="text-sm text-muted-foreground">
-                  <span className="line-clamp-4 whitespace-pre-wrap break-words">
+                  <span className="line-clamp-4 whitespace-pre-wrap break-words dark:text-white">
                     {row.bio || "—"}
                   </span>
                 </TableCell>

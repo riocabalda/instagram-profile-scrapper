@@ -6,7 +6,6 @@ import {
   FOLLOWERS_COUNT_MAX,
   FOLLOWERS_COUNT_MIN,
 } from "@/constants/instagramDataset";
-import TableSkeleton from "@/components/instagram/TableSkeleton";
 import DownloadExcelButton from "@/components/instagram/DownloadExcelButton";
 import ProfilesResultsTable from "@/components/instagram/ProfilesResultsTable";
 import { Loader2 } from "lucide-react";
