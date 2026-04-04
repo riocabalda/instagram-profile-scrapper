@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-const STORAGE_KEY = "instagram-profile-dataset";
+const THEME_STORAGE_KEY = "instagram-app-theme";
 
 /**
  * @typedef {Object} ThemeState
@@ -44,7 +44,7 @@ export const useThemeStore = create(
       },
     }),
     {
-      name: STORAGE_KEY,
+      name: THEME_STORAGE_KEY,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         isDarkMode: state.isDarkMode,
