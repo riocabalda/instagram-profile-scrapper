@@ -1,13 +1,12 @@
+import { cn } from "@/lib/utils";
 import { Check, Copy } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
+import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
-import { cn } from "@/lib/utils";
 
 /**
  * @param {{
@@ -17,7 +16,7 @@ import { cn } from "@/lib/utils";
  *   size?: "default" | "sm" | "lg" | "icon";
  * }} props
  */
-export function CopyTextButton({ text, label, className, size = "icon" }) {
+function CopyTextButton({ text, label, className, size = "icon" }) {
   const { copy, copied } = useCopyToClipboard();
 
   const disabled = !text;
@@ -43,9 +42,9 @@ export function CopyTextButton({ text, label, className, size = "icon" }) {
           </Button>
         </span>
       </TooltipTrigger>
-      <TooltipContent side="top">
-        {copied ? "Copied" : label}
-      </TooltipContent>
+      <TooltipContent side="top">{copied ? "Copied" : label}</TooltipContent>
     </Tooltip>
   );
 }
+
+export default CopyTextButton;

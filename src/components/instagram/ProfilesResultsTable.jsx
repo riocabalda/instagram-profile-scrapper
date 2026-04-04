@@ -1,5 +1,7 @@
+import { cn } from "@/lib/utils";
 import { ExternalLink } from "lucide-react";
-import { CopyTextButton } from "@/components/instagram/CopyTextButton";
+import { getProfileRowValues } from "@/utils/profileRowValues";
+import { useProfileDatasetStore } from "@/stores/profileDatasetStore";
 import {
   Table,
   TableBody,
@@ -8,14 +10,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
-import { useProfileDatasetStore } from "@/stores/profileDatasetStore";
-import { getProfileRowValues } from "@/utils/profileRowValues";
+import CopyTextButton from "@/components/instagram/CopyTextButton";
 
 /**
- * @param {{ profiles: Record<string, unknown>[]; className?: string }} props
+ * @param {{ profiles: Record<string, unknown>[]; isLoading?: boolean; className?: string }} props
  */
-export function ProfilesResultsTable({ profiles, className }) {
+function ProfilesResultsTable({ profiles, className }) {
   const urlClickedRowIndex = useProfileDatasetStore(
     (s) => s.urlClickedRowIndexes,
   );
@@ -26,7 +26,7 @@ export function ProfilesResultsTable({ profiles, className }) {
       <div
         className={cn(
           "rounded-lg border border-dashed bg-muted/30 px-6 py-16 text-center text-sm text-muted-foreground",
-          className
+          className,
         )}
       >
         No profiles match the filters. Upload a dataset or adjust your source
@@ -74,7 +74,7 @@ export function ProfilesResultsTable({ profiles, className }) {
                 key={key}
                 className={cn(
                   isUrlRowActive &&
-                    "bg-emerald-100 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-950/45"
+                    "bg-emerald-100 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-950/45",
                 )}
               >
                 <TableCell className="text-center tabular-nums text-muted-foreground">
@@ -133,3 +133,5 @@ export function ProfilesResultsTable({ profiles, className }) {
     </div>
   );
 }
+
+export default ProfilesResultsTable;

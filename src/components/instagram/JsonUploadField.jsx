@@ -1,10 +1,9 @@
-import { FileJson2, Loader2, Upload } from "lucide-react";
 import { useCallback, useId, useRef, useState } from "react";
-
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { JSON_FILE_ACCEPT } from "@/constants/instagramDataset";
 import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { FileJson2, Loader2, Upload } from "lucide-react";
+import { JSON_FILE_ACCEPT } from "@/constants/instagramDataset";
 
 /**
  * @param {{
@@ -17,7 +16,7 @@ import { cn } from "@/lib/utils";
  *   isLoading?: boolean;
  * }} props
  */
-export function JsonUploadField({
+function JsonUploadField({
   onDatasetFile,
   className,
   disabled = false,
@@ -166,3 +165,5 @@ export function JsonUploadField({
     </div>
   );
 }
+
+export default JsonUploadField;

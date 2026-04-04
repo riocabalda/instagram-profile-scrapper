@@ -37,7 +37,7 @@ export function filterByPublicAccount(profile) {
  */
 export function applyProfileFilters(profiles, predicates) {
   return profiles.filter((profile) =>
-    predicates.every((predicate) => predicate(profile))
+    predicates.every((predicate) => predicate(profile)),
   );
 }
 

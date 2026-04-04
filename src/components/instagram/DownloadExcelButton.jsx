@@ -1,7 +1,6 @@
+import { toast } from "sonner";
 import { FileDown } from "lucide-react";
 import { useCallback, useState } from "react";
-import { toast } from "sonner";
-
 import { Button } from "@/components/ui/button";
 import { downloadProfilesAsExcel } from "@/utils/exportProfilesToExcel";
 
@@ -12,11 +11,7 @@ import { downloadProfilesAsExcel } from "@/utils/exportProfilesToExcel";
  *   className?: string;
  * }} props
  */
-export function DownloadExcelButton({
-  profiles,
-  sourceFileLabel = "",
-  className,
-}) {
+function DownloadExcelButton({ profiles, sourceFileLabel = "", className }) {
   const [isExporting, setIsExporting] = useState(false);
 
   const handleClick = useCallback(async () => {
@@ -54,3 +49,5 @@ export function DownloadExcelButton({
     </Button>
   );
 }
+
+export default DownloadExcelButton;
