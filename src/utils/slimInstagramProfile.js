@@ -1,6 +1,6 @@
 /**
- * Keeps only fields needed for validation, filters, and the results table.
- * Drops nested arrays (posts, IGTV, etc.) so memory stays proportional to row count.
+ * Keeps only fields used by validation, filters, table, and Excel export.
+ * Drops everything else (nested posts, raw payloads, extra metrics, etc.).
  *
  * @param {unknown} source
  * @returns {Record<string, unknown>}
@@ -12,17 +12,23 @@ export function slimInstagramProfileRecord(source) {
 
   const s = /** @type {Record<string, unknown>} */ (source);
 
-  return {
-    id: s.id,
+  /** @type {Record<string, unknown>} */
+  const record = {
+    ...(typeof s.id === "string" || typeof s.id === "number"
+      ? { id: s.id }
+      : {}),
     username: s.username,
     url: s.url,
     inputUrl: s.inputUrl,
     fullName: s.fullName,
     biography: s.biography,
     followersCount: s.followersCount,
-    followsCount: s.followsCount,
     private: s.private,
   };
+
+  return Object.fromEntries(
+    Object.entries(record).filter(([, value]) => value !== undefined),
+  );
 }
 
 /**

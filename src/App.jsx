@@ -2,6 +2,8 @@ import { Filter, Instagram, Sparkles } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 
+import { useProfileDatasetStore } from "@/stores/profileDatasetStore";
+
 import { DownloadExcelButton } from "@/components/instagram/DownloadExcelButton";
 import { JsonUploadField } from "@/components/instagram/JsonUploadField";
 import { ProfilesResultsTable } from "@/components/instagram/ProfilesResultsTable";
@@ -23,15 +25,14 @@ import { filterProfilesForResultsTable } from "@/utils/profileFilters";
 import { parseProfileDatasetBuffer } from "@/utils/parseProfileDataset";
 
 function App() {
-  const [rawProfiles, setRawProfiles] = useState(
-    /** @type {Record<string, unknown>[]} */ ([]),
-  );
-  const [fileLabel, setFileLabel] = useState("");
+  const rawProfiles = useProfileDatasetStore((s) => s.rawProfiles);
+  const fileLabel = useProfileDatasetStore((s) => s.fileLabel);
+  const setDataset = useProfileDatasetStore((s) => s.setDataset);
   const [isParsing, setIsParsing] = useState(false);
 
   const filteredProfiles = useMemo(
     () => filterProfilesForResultsTable(rawProfiles),
-    [rawProfiles],
+    [rawProfiles]
   );
 
   const handleDatasetFile = useCallback(
@@ -51,21 +52,24 @@ function App() {
         const missingCount = countProfilesWithMissingFields(asRecords);
         if (missingCount > 0) {
           toast.warning(
-            `${missingCount} profile${missingCount === 1 ? "" : "s"} missing required fields (username, URL/inputUrl, or followersCount).`,
+            `${missingCount} profile${
+              missingCount === 1 ? "" : "s"
+            } missing required fields (username, URL/inputUrl, or followersCount).`
           );
         } else {
-          toast.success("Dataset loaded. All profiles include required fields.");
+          toast.success(
+            "Dataset loaded. All profiles include required fields."
+          );
         }
 
-        setRawProfiles(asRecords);
-        setFileLabel(meta.name);
+        setDataset(asRecords, meta.name);
       } catch {
         toast.error("Could not read that file. Try again.");
       } finally {
         setIsParsing(false);
       }
     },
-    [],
+    [setDataset]
   );
 
   return (
@@ -84,9 +88,8 @@ function App() {
               <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
                 Upload your scraper JSON (array of creators). We validate the
                 shape, flag incomplete rows, and list only public profiles whose
-                follower count is between{" "}
-                {FOLLOWERS_COUNT_MIN.toLocaleString()} and{" "}
-                {FOLLOWERS_COUNT_MAX.toLocaleString()}. Large JSON files are
+                follower count is between {FOLLOWERS_COUNT_MIN.toLocaleString()}{" "}
+                and {FOLLOWERS_COUNT_MAX.toLocaleString()}. Large JSON files are
                 parsed in a background worker and trimmed to the fields this UI
                 needs, so hundreds of profiles stay fast.
               </p>

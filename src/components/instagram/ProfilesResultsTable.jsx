@@ -1,6 +1,4 @@
 import { ExternalLink } from "lucide-react";
-import { useEffect, useState } from "react";
-
 import { CopyTextButton } from "@/components/instagram/CopyTextButton";
 import {
   Table,
@@ -10,27 +8,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getProfileRowValues } from "@/utils/profileRowValues";
 import { cn } from "@/lib/utils";
+import { useProfileDatasetStore } from "@/stores/profileDatasetStore";
+import { getProfileRowValues } from "@/utils/profileRowValues";
 
 /**
  * @param {{ profiles: Record<string, unknown>[]; className?: string }} props
  */
 export function ProfilesResultsTable({ profiles, className }) {
-  const [urlClickedRowKey, setUrlClickedRowKey] = useState(
-    /** @type {string | null} */ (null),
+  const urlClickedRowIndex = useProfileDatasetStore(
+    (s) => s.urlClickedRowIndexes,
   );
-
-  useEffect(() => {
-    setUrlClickedRowKey(null);
-  }, [profiles]);
+  const addUrlClickedRow = useProfileDatasetStore((s) => s.addUrlClickedRow);
 
   if (profiles.length === 0) {
     return (
       <div
         className={cn(
           "rounded-lg border border-dashed bg-muted/30 px-6 py-16 text-center text-sm text-muted-foreground",
-          className,
+          className
         )}
       >
         No profiles match the filters. Upload a dataset or adjust your source
@@ -66,7 +62,7 @@ export function ProfilesResultsTable({ profiles, className }) {
                 ? String(profile.id)
                 : `${username || "row"}-${index}`;
 
-            const isUrlRowActive = urlClickedRowKey === key;
+            const isUrlRowActive = urlClickedRowIndex.includes(index);
             const rowNumber = index + 1;
             const followersDisplay =
               row.followersValue === null
@@ -78,16 +74,16 @@ export function ProfilesResultsTable({ profiles, className }) {
                 key={key}
                 className={cn(
                   isUrlRowActive &&
-                    "bg-emerald-100 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-950/45",
+                    "bg-emerald-100 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:hover:bg-emerald-950/45"
                 )}
               >
-                <TableCell className="align-top text-center tabular-nums text-muted-foreground">
+                <TableCell className="text-center tabular-nums text-muted-foreground">
                   {rowNumber}
                 </TableCell>
-                <TableCell className="align-top font-medium">
-                  {row.fullName || "—"}
+                <TableCell className="font-medium">
+                  {row.fullName || ""}
                 </TableCell>
-                <TableCell className="align-top">
+                <TableCell className="">
                   <div className="flex items-start gap-1">
                     <span className="break-all pt-2 text-sm">
                       {username || "—"}
@@ -99,15 +95,15 @@ export function ProfilesResultsTable({ profiles, className }) {
                     />
                   </div>
                 </TableCell>
-                <TableCell className="align-top">
+                <TableCell className="">
                   {url ? (
                     <div className="flex items-start gap-1">
                       <a
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        onClick={() => setUrlClickedRowKey(key)}
-                        className="inline-flex max-w-[min(420px,55vw)] items-center gap-1 break-all pt-2 text-sm font-medium text-emerald-700 underline-offset-4 hover:text-emerald-800 hover:underline dark:text-emerald-400 dark:hover:text-emerald-300"
+                        onClick={() => addUrlClickedRow(index)}
+                        className="inline-flex max-w-[min(420px,55vw)] items-center gap-1 break-all pt-2 text-sm font-medium underline-offset-4 hover:text-blue-400 hover:underline dark:text-white  dark:hover:text-blue-400"
                       >
                         <span className="line-clamp-2">{url}</span>
                         <ExternalLink
@@ -121,10 +117,10 @@ export function ProfilesResultsTable({ profiles, className }) {
                     <span className="text-muted-foreground">—</span>
                   )}
                 </TableCell>
-                <TableCell className="align-top tabular-nums">
+                <TableCell className="tabular-nums">
                   {followersDisplay}
                 </TableCell>
-                <TableCell className="align-top text-sm text-muted-foreground">
+                <TableCell className="text-sm text-muted-foreground">
                   <span className="line-clamp-4 whitespace-pre-wrap break-words">
                     {row.bio || "—"}
                   </span>
