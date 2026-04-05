@@ -1,11 +1,8 @@
 import { useState, useEffect, useTransition } from "react";
 import { Separator } from "@/components/ui/separator";
 import { useProfileDatasetStore } from "@/stores/profileDatasetStore";
+import { useFollowersFilterStore } from "@/stores/followersFilterStore";
 import { filterProfilesForResultsTable } from "@/utils/profileFilters";
-import {
-  FOLLOWERS_COUNT_MAX,
-  FOLLOWERS_COUNT_MIN,
-} from "@/constants/instagramDataset";
 import DownloadExcelButton from "@/components/instagram/DownloadExcelButton";
 import ProfilesResultsTable from "@/components/instagram/ProfilesResultsTable";
 import { Loader2 } from "lucide-react";
@@ -13,6 +10,8 @@ import { Loader2 } from "lucide-react";
 function TablePage() {
   const rawProfiles = useProfileDatasetStore((s) => s.rawProfiles);
   const fileLabel = useProfileDatasetStore((s) => s.fileLabel);
+  const followersCountMin = useFollowersFilterStore((s) => s.followersCountMin);
+  const followersCountMax = useFollowersFilterStore((s) => s.followersCountMax);
   const [filteredProfiles, setFilteredProfiles] = useState([]);
   const [isPending, startTransition] = useTransition();
 
@@ -23,12 +22,16 @@ function TablePage() {
       });
       return;
     }
-    const results = filterProfilesForResultsTable(rawProfiles);
+    const results = filterProfilesForResultsTable(
+      rawProfiles,
+      followersCountMin,
+      followersCountMax,
+    );
 
     startTransition(() => {
       setFilteredProfiles(results);
     });
-  }, [rawProfiles]);
+  }, [rawProfiles, followersCountMin, followersCountMax]);
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8">
@@ -40,8 +43,8 @@ function TablePage() {
             </h2>
             <p className="text-xs text-muted-foreground sm:text-sm">
               Private accounts hidden · Followers Count between{" "}
-              {FOLLOWERS_COUNT_MIN.toLocaleString()} and{" "}
-              {FOLLOWERS_COUNT_MAX.toLocaleString()} · Profiles missing required
+              {followersCountMin.toLocaleString()} and{" "}
+              {followersCountMax.toLocaleString()} · Profiles missing required
               fields excluded
             </p>
           </div>

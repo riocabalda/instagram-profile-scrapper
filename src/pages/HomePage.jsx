@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useProfileDatasetStore } from "@/stores/profileDatasetStore";
+import { useFollowersFilterStore } from "@/stores/followersFilterStore";
 import { parseProfileDatasetBuffer } from "@/utils/parseProfileDataset";
 import { countProfilesWithMissingFields } from "@/utils/profileFieldCompleteness";
 import {
@@ -11,15 +12,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  FOLLOWERS_COUNT_MAX,
-  FOLLOWERS_COUNT_MIN,
-} from "@/constants/instagramDataset";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import JsonUploadField from "@/components/instagram/JsonUploadField";
 
 function HomePage() {
   const navigate = useNavigate();
   const setDataset = useProfileDatasetStore((s) => s.setDataset);
+  const followersCountMin = useFollowersFilterStore((s) => s.followersCountMin);
+  const followersCountMax = useFollowersFilterStore((s) => s.followersCountMax);
+  const setFollowersCountMin = useFollowersFilterStore(
+    (s) => s.setFollowersCountMin,
+  );
+  const setFollowersCountMax = useFollowersFilterStore(
+    (s) => s.setFollowersCountMax,
+  );
   const [isParsing, setIsParsing] = useState(false);
 
   const handleDatasetFile = useCallback(
@@ -70,13 +77,54 @@ function HomePage() {
           <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">
             Upload your scraper JSON (array of creators). We validate the shape,
             flag incomplete rows, and list only public profiles whose follower
-            count is between {FOLLOWERS_COUNT_MIN.toLocaleString()} and{" "}
-            {FOLLOWERS_COUNT_MAX.toLocaleString()}. Large JSON files are parsed
-            in a background worker and trimmed to the fields this UI needs, so
+            count is between {followersCountMin.toLocaleString()} and{" "}
+            {followersCountMax.toLocaleString()}. Large JSON files are parsed in
+            a background worker and trimmed to the fields this UI needs, so
             hundreds of profiles stay fast.
           </p>
         </div>
       </header>
+
+      <Card className="border-violet-100/80 shadow-md dark:border-violet-900/40">
+        <CardHeader>
+          <CardTitle>Filter settings</CardTitle>
+          <CardDescription>
+            Adjust the follower count range for profile filtering.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="min-followers">Minimum followers</Label>
+              <Input
+                id="min-followers"
+                type="number"
+                value={followersCountMin}
+                onChange={(e) =>
+                  setFollowersCountMin(parseInt(e.target.value, 10) || 0)
+                }
+                min="0"
+                step="100"
+                className="text-base"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="max-followers">Maximum followers</Label>
+              <Input
+                id="max-followers"
+                type="number"
+                value={followersCountMax}
+                onChange={(e) =>
+                  setFollowersCountMax(parseInt(e.target.value, 10) || 0)
+                }
+                min="0"
+                step="100"
+                className="text-base"
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <Card className="border-violet-100/80 shadow-md dark:border-violet-900/40">
         <CardHeader>

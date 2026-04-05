@@ -1,13 +1,14 @@
-import {
-  FOLLOWERS_COUNT_MAX,
-  FOLLOWERS_COUNT_MIN,
-} from "@/constants/instagramDataset";
-
 /**
  * @param {Record<string, unknown>} profile
+ * @param {number} minFollowers
+ * @param {number} maxFollowers
  * @returns {boolean}
  */
-export function filterByFollowsCountInRange(profile) {
+export function filterByFollowsCountInRange(
+  profile,
+  minFollowers,
+  maxFollowers,
+) {
   if (!profile || typeof profile !== "object") {
     return false;
   }
@@ -15,7 +16,7 @@ export function filterByFollowsCountInRange(profile) {
   if (typeof n !== "number" || !Number.isFinite(n)) {
     return false;
   }
-  return n >= FOLLOWERS_COUNT_MIN && n <= FOLLOWERS_COUNT_MAX;
+  return n >= minFollowers && n <= maxFollowers;
 }
 
 /**
@@ -44,11 +45,17 @@ export function applyProfileFilters(profiles, predicates) {
 /**
  * Default pipeline for this app: follows band + public only.
  * @param {Record<string, unknown>[]} profiles
+ * @param {number} minFollowers
+ * @param {number} maxFollowers
  * @returns {Record<string, unknown>[]}
  */
-export function filterProfilesForResultsTable(profiles) {
+export function filterProfilesForResultsTable(
+  profiles,
+  minFollowers,
+  maxFollowers,
+) {
   return applyProfileFilters(profiles, [
-    filterByFollowsCountInRange,
+    (p) => filterByFollowsCountInRange(p, minFollowers, maxFollowers),
     filterByPublicAccount,
   ]);
 }
