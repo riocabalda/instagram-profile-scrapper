@@ -17,7 +17,7 @@ import CopyTextButton from "@/components/instagram/CopyTextButton";
  */
 function ProfilesResultsTable({ profiles, className }) {
   const urlClickedRowIndex = useProfileDatasetStore(
-    (s) => s.urlClickedRowIndexes,
+    (s) => s.urlClickedRowIndexes
   );
   const addUrlClickedRow = useProfileDatasetStore((s) => s.addUrlClickedRow);
 
@@ -26,7 +26,7 @@ function ProfilesResultsTable({ profiles, className }) {
       <div
         className={cn(
           "rounded-lg border border-dashed bg-muted/30 px-6 py-16 text-center text-sm text-muted-foreground",
-          className,
+          className
         )}
       >
         No profiles match the filters. Upload a dataset or adjust your source
@@ -72,7 +72,7 @@ function ProfilesResultsTable({ profiles, className }) {
                 key={key}
                 className={cn(
                   isUrlRowActive &&
-                    "bg-emerald-100 hover:bg-emerald-100 dark:bg-emerald-950 dark:hover:bg-emerald-950",
+                    "bg-emerald-100 hover:bg-emerald-100 dark:bg-emerald-950 dark:hover:bg-emerald-950"
                 )}
               >
                 <TableCell className="text-center tabular-nums text-muted-foreground">
@@ -94,30 +94,28 @@ function ProfilesResultsTable({ profiles, className }) {
                   </div>
                 </TableCell>
                 <TableCell className="">
-                  {url ? (
-                    <div className="flex items-start gap-1">
-                      <a
-                        href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => addUrlClickedRow(index)}
-                        className="inline-flex max-w-[min(420px,55vw)] items-center gap-1 break-all pt-2 text-sm font-medium underline-offset-4 text-blue-700 dark:text-blue-200 hover:text-blue-400 hover:underline dark:hover:text-blue-400"
-                      >
-                        <span className="line-clamp-2">{url}</span>
-                        <ExternalLink
-                          className="size-3.5 shrink-0 opacity-70"
-                          aria-hidden
-                        />
-                      </a>
-                      <CopyTextButton
-                        text={url}
-                        label="Copy URL"
-                        onClick={() => addUrlClickedRow(index)}
+                  <div className="flex items-start gap-1">
+                    <a
+                      href={url ?? `https://www.instagram.com/${username}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => addUrlClickedRow(index)}
+                      className="inline-flex max-w-[min(420px,55vw)] items-center gap-1 break-all pt-2 text-sm font-medium underline-offset-4 text-blue-700 dark:text-blue-200 hover:text-blue-400 hover:underline dark:hover:text-blue-400"
+                    >
+                      <span className="line-clamp-2">
+                        {url ?? `https://www.instagram.com/${username}`}
+                      </span>
+                      <ExternalLink
+                        className="size-3.5 shrink-0 opacity-70"
+                        aria-hidden
                       />
-                    </div>
-                  ) : (
-                    <span className="text-muted-foreground">—</span>
-                  )}
+                    </a>
+                    <CopyTextButton
+                      text={url}
+                      label="Copy URL"
+                      onClick={() => addUrlClickedRow(index)}
+                    />
+                  </div>
                 </TableCell>
                 <TableCell className="tabular-nums">
                   {followersDisplay}
