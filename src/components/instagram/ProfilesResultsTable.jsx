@@ -96,14 +96,14 @@ function ProfilesResultsTable({ profiles, className }) {
                 <TableCell className="">
                   <div className="flex items-start gap-1">
                     <a
-                      href={url ?? `https://www.instagram.com/${username}`}
+                      href={url || `https://www.instagram.com/${username}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => addUrlClickedRow(index)}
                       className="inline-flex max-w-[min(420px,55vw)] items-center gap-1 break-all pt-2 text-sm font-medium underline-offset-4 text-blue-700 dark:text-blue-200 hover:text-blue-400 hover:underline dark:hover:text-blue-400"
                     >
                       <span className="line-clamp-2">
-                        {url ?? `https://www.instagram.com/${username}`}
+                        {url || `https://www.instagram.com/${username}`}
                       </span>
                       <ExternalLink
                         className="size-3.5 shrink-0 opacity-70"
